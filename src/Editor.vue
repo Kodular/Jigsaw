@@ -16,16 +16,16 @@
         </span>
       </template>
     </Toolbar>
-    <Splitter style="height: 100%;">
-      <SplitterPanel :size="60">
+<!--    <Splitter style="height: 100%;">-->
+<!--      <SplitterPanel :size="60">-->
         <BlocklyComponent :options="options" ref="blocklyEl" />
-      </SplitterPanel>
+<!--      </SplitterPanel>-->
 
-      <SplitterPanel :size="40">
-        <!-- <DevicePreview /> -->
-        <LivePreview />
-      </SplitterPanel>
-    </Splitter>
+<!--      <SplitterPanel :size="40">-->
+<!--        <DevicePreview /> -->
+<!--        <LivePreview />-->
+<!--      </SplitterPanel>-->
+<!--    </Splitter>-->
   </div>
 </template>
 
@@ -42,7 +42,7 @@ import DevicePreview from "./components/DevicePreview.vue";
 import toolbox from "./blocks/toolbox";
 import "./blocks/jigsaw";
 import * as Blockly from "blockly";
-import { generateAppCode } from "./blocks/codegen";
+import { generateAppCode } from "./blocks/codegen.ts";
 import { ref, onMounted } from "vue";
 import LivePreview from './components/LivePreview.vue';
 
