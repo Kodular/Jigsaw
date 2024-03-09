@@ -1,32 +1,21 @@
 import {javascriptGenerator} from "blockly/javascript";
-import {BaseDirectory, createDir, exists, writeTextFile} from '@tauri-apps/api/fs';
+import {BaseDirectory, createDir, writeTextFile} from '@tauri-apps/api/fs';
 import {dirname, join} from "@tauri-apps/api/path";
 import Blockly from "blockly";
 
 const JIGSAW_PROJECTS_DIR = './JigsawProjects'
-const PROJECT_NAME = 'Todolist'
 
-export async function generateAppCode(workspace: Blockly.Workspace) {
+export async function generateAppCode(projectName: string, workspace: Blockly.Workspace) {
   const code = javascriptGenerator.workspaceToCode(workspace);
 
-  const projectPath = await join(JIGSAW_PROJECTS_DIR, PROJECT_NAME);
-
-  // Check if the project dir exists
-  const r = await exists(projectPath, {dir: BaseDirectory.Home});
-
-  if (!r) {
-    console.log('Project does not exist, creating');
-    await createDir(projectPath, {recursive: true, dir: BaseDirectory.Home});
-  }
+  const projectPath = await join(JIGSAW_PROJECTS_DIR, projectName);
 
   console.log('Writing project files');
 
-  await writeProjectFiles(projectPath, code);
-
-  return {[projectPath]: r};
+  await writeProjectFiles(projectName, projectPath, code);
 }
 
-async function writeProjectFiles(projectPath: string, code: string) {
+async function writeProjectFiles(projectName: string, projectPath: string, code: string) {
   // Based off https://github.com/ionic-team/starters/tree/main/vue-vite/base
   const files = {
     // language=Vue
@@ -36,12 +25,38 @@ async function writeProjectFiles(projectPath: string, code: string) {
 
         ${code}
     `,
-    'src/main.js': '',
+    'src/main.js': `
+import { createApp } from 'vue'
+import App from './App.vue'
+import { IonicVue } from '@ionic/vue';
+
+/* Core CSS required for Ionic components to work properly */
+import '@ionic/vue/css/core.css';
+/* Basic CSS for apps built with Ionic */
+import '@ionic/vue/css/normalize.css';
+import '@ionic/vue/css/structure.css';
+import '@ionic/vue/css/typography.css';
+/* Optional CSS utils that can be commented out */
+import '@ionic/vue/css/padding.css';
+import '@ionic/vue/css/float-elements.css';
+import '@ionic/vue/css/text-alignment.css';
+import '@ionic/vue/css/text-transformation.css';
+import '@ionic/vue/css/flex-utils.css';
+import '@ionic/vue/css/display.css';
+
+window.addEventListener('unhandledrejection', (err) => {
+  throw new Error(err.reason);
+});
+
+const app = createApp(App);
+app.use(IonicVue, { hardwareBackButton: true });
+app.mount('#app');
+    `,
     'index.html': `<!DOCTYPE html>
     <html lang="en">
     <head>
         <meta charset="utf-8"/>
-        <title>Ionic App</title>
+        <title>${projectName}</title>
 
         <base href="/"/>
 
@@ -67,26 +82,41 @@ async function writeProjectFiles(projectPath: string, code: string) {
     </html>
     `,
     'package.json': {
-      name: PROJECT_NAME,
-      version: '0.0.1',
+      name: projectName,
+      version: '0.0.0',
       private: true,
       type: "module",
       scripts: {
-        "start": "vite",
+        "dev": "vite",
         "build": "vite build"
       },
       dependencies: {
         "@ionic/vue": "^7.0.0",
-        "@ionic/vue-router": "^7.0.0",
         "ionicons": "^7.0.0",
-        "vue": "^3.3.0",
-        "vue-router": "^4.2.0"
+        "vue": "^3.4.21",
+        "vue-router": "^4.3.0"
       },
       devDependencies: {
-        "@vitejs/plugin-vue": "^4.0.0",
-        "vite": "^5.0.0",
+        "@vitejs/plugin-vue": "^5.0.4",
+        "vite": "^5.1.5",
       }
-    }
+    },
+    'vite.config.js': `
+import { defineConfig } from 'vite';
+import vue from '@vitejs/plugin-vue';
+
+// https://vitejs.dev/config/
+export default defineConfig({
+  plugins: [vue()],
+  server: {
+    port: 2410
+  },
+  preview: {
+    port: 2410,
+    strictPort: true
+  }
+})
+`
   }
 
   for (const [file, content] of Object.entries(files)) {

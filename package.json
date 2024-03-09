@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@blockly/block-shareable-procedures": "^4.1.1",
+    "@tabler/icons-vue": "^2.47.0",
     "@tauri-apps/api": "^1.5.3",
     "@vueuse/core": "^10.9.0",
     "blockly": "^10.4.2",
@@ -19,6 +20,7 @@
     "pinia": "^2.1.7",
     "primevue": "^3.49.1",
     "tauri-plugin-fs-extra-api": "github:tauri-apps/tauri-plugin-fs-extra#v1",
+    "tauri-plugin-store-api": "github:tauri-apps/tauri-plugin-store#v1",
     "vue": "^3.4.21",
     "vue-router": "^4.3.0"
   },

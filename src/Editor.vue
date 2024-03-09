@@ -2,50 +2,62 @@
   <div style="height:calc(100vh - 40px);">
     <Toolbar>
       <template #start>
-        <Button @click="$router.back()">Go back</Button>
+        <Button @click="$router.back()">Back to Projects</Button>
       </template>
 
       <template #center>
-        <InputText placeholder="Search" />
+        {{ project?.name }}
       </template>
 
       <template #end>
-        <span class="p-buttonset">
+        <ButtonGroup>
           <Button>Build</Button>
-          <Button>Preview</Button>
-        </span>
+          <Button @click="startPreview">Preview</Button>
+          <Button @click="showLogs = true">Logs</Button>
+          <Button @click="saveCode">Save</Button>
+        </ButtonGroup>
       </template>
     </Toolbar>
-<!--    <Splitter style="height: 100%;">-->
-<!--      <SplitterPanel :size="60">-->
-        <BlocklyComponent :options="options" ref="blocklyEl" />
-<!--      </SplitterPanel>-->
+    <!--    <Splitter style="height: 100%;">-->
+    <!--      <SplitterPanel :size="60">-->
+    <BlocklyComponent :options="options" ref="blocklyEl"/>
+    <!--      </SplitterPanel>-->
 
-<!--      <SplitterPanel :size="40">-->
-<!--        <DevicePreview /> -->
-<!--        <LivePreview />-->
-<!--      </SplitterPanel>-->
-<!--    </Splitter>-->
+    <!--      <SplitterPanel :size="40">-->
+    <!--        <DevicePreview /> -->
+    <!--        <LivePreview />-->
+    <!--      </SplitterPanel>-->
+    <!--    </Splitter>-->
+    <Sidebar v-model:visible="showLogs" header="Logs">
+      <pre>
+        <template v-for="log in logs">
+          {{ log }}
+        </template>
+      </pre>
+    </Sidebar>
   </div>
 </template>
 
 <script lang="ts" setup>
-import Splitter from 'primevue/splitter';
-import SplitterPanel from 'primevue/splitterpanel';
 import Toolbar from 'primevue/toolbar';
-import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
-
+import ButtonGroup from 'primevue/buttongroup';
 import BlocklyComponent from "./components/BlocklyComponent.vue";
-import DevicePreview from "./components/DevicePreview.vue";
-
+import Sidebar from 'primevue/sidebar';
+import Toast from 'primevue/toast';
 import toolbox from "./blocks/toolbox";
 import "./blocks/jigsaw";
 import * as Blockly from "blockly";
-import { generateAppCode } from "./blocks/codegen.ts";
-import { ref, onMounted } from "vue";
-import LivePreview from './components/LivePreview.vue';
+import {generateAppCode} from "./blocks/codegen.ts";
+import {onMounted, ref} from "vue";
+import {runCommand} from "./utils/shell.ts";
+import {getFullProjectPath} from "./utils/fs.ts";
 
+const props = defineProps<{
+  project: any
+}>();
+
+const project = props.project;
 
 const options = {
   // media: "media/",
@@ -68,19 +80,24 @@ const options = {
   toolbox
 };
 
-let code = ref({});
 const blocklyEl = ref<typeof BlocklyComponent | null>(null);
+const showLogs = ref(false);
+const logs = ref<string[]>([]);
 
-const showCode = async () => {
-  if (!blocklyEl.value || !blocklyEl.value.workspace) {
-    code.value = {};
-  } else {
-    code.value = await generateAppCode(blocklyEl.value.workspace);
+async function saveCode() {
+  if (project && blocklyEl.value?.workspace) {
+    await generateAppCode(project.name, blocklyEl.value.workspace);
   }
 }
 
+async function startPreview() {
+  const projectFullPath = await getFullProjectPath(project?.name);
+  await runCommand("pnpm", ["install"], projectFullPath, (line) => logs.value.push(line));
+  await runCommand("pnpm", ["dev"], projectFullPath, (line) => logs.value.push(line));
+}
+
 onMounted(() => {
-  const workspace = blocklyEl.value.workspace;
+  const workspace = blocklyEl.value?.workspace;
   const STATE_KEY = "workspace-state";
 
   const state = JSON.parse(localStorage.getItem(STATE_KEY) as string);
@@ -91,7 +108,7 @@ onMounted(() => {
   workspace.addChangeListener(() => {
     if (workspace.isDragging()) return; // Don't update while changes are happening.
 
-    showCode().then(() => { });
+    saveCode().then(() => {});
 
     let state = Blockly.serialization.workspaces.save(workspace);
     localStorage.setItem(STATE_KEY, JSON.stringify(state));

@@ -13,11 +13,25 @@
     "allowlist": {
       "all": true,
       "shell": {
-        "all": true
+        "all": true,
+        "scope": [
+          {
+            "name": "cmd",
+            "cmd": "cmd",
+            "args": true
+          },
+          {
+            "name": "pnpm",
+            "cmd": "pnpm",
+            "args": true
+          }
+        ]
       },
       "fs": {
         "all": true,
-        "scope": ["**/*"]
+        "scope": [
+          "**/*"
+        ]
       }
     },
     "bundle": {

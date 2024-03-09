@@ -1,9 +1,10 @@
-import {BaseDirectory, copyFile, createDir, readDir} from "@tauri-apps/api/fs";
+import {BaseDirectory, copyFile, createDir, FileEntry, readDir} from "@tauri-apps/api/fs";
+import {homeDir, join} from "@tauri-apps/api/path";
 
-async function copyDir(src: string, dest: string) {
+export async function copyDir(src: string, dest: string) {
   const entries = await readDir(src, {dir: BaseDirectory.Home, recursive: true});
 
-  async function processEntries(entries) {
+  async function processEntries(entries: FileEntry[]) {
     for (const entry of entries) {
       const destPath = entry.path.replace(src, dest)
       if (entry.children) {
@@ -17,4 +18,8 @@ async function copyDir(src: string, dest: string) {
   }
 
   await processEntries(entries);
+}
+
+export async function getFullProjectPath(projectName: string) {
+  return await join(await homeDir(), 'JigsawProjects', projectName);
 }
