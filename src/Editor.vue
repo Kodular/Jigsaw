@@ -28,13 +28,6 @@
     <!--        <LivePreview />-->
     <!--      </SplitterPanel>-->
     <!--    </Splitter>-->
-    <Sidebar v-model:visible="showLogs" header="Logs">
-      <pre>
-        <template v-for="log in logs">
-          {{ log }}
-        </template>
-      </pre>
-    </Sidebar>
   </div>
 </template>
 
@@ -44,7 +37,6 @@ import Button from 'primevue/button';
 import ButtonGroup from 'primevue/buttongroup';
 import BlocklyComponent from "./components/BlocklyComponent.vue";
 import Sidebar from 'primevue/sidebar';
-import Toast from 'primevue/toast';
 import toolbox from "./blocks/toolbox";
 import "./blocks/jigsaw";
 import * as Blockly from "blockly";
@@ -52,6 +44,9 @@ import {generateAppCode} from "./blocks/codegen.ts";
 import {onMounted, ref} from "vue";
 import {runCommand} from "./utils/shell.ts";
 import {getFullProjectPath} from "./utils/fs.ts";
+import {useToast} from 'primevue/usetoast';
+import {WebviewWindow} from "@tauri-apps/api/window";
+import {runPreviewCommand} from "./commands/preview.ts";
 
 const props = defineProps<{
   project: any
@@ -80,9 +75,19 @@ const options = {
   toolbox
 };
 
+// Events that should trigger the auto-save procedure.
+const blockEvents = new Set([
+  Blockly.Events.BLOCK_CHANGE,
+  Blockly.Events.BLOCK_CREATE,
+  Blockly.Events.BLOCK_DELETE,
+  Blockly.Events.BLOCK_MOVE,
+]);
+
 const blocklyEl = ref<typeof BlocklyComponent | null>(null);
 const showLogs = ref(false);
 const logs = ref<string[]>([]);
+
+const toast = useToast();
 
 async function saveCode() {
   if (project && blocklyEl.value?.workspace) {
@@ -90,10 +95,8 @@ async function saveCode() {
   }
 }
 
-async function startPreview() {
-  const projectFullPath = await getFullProjectPath(project?.name);
-  await runCommand("pnpm", ["install"], projectFullPath, (line) => logs.value.push(line));
-  await runCommand("pnpm", ["dev"], projectFullPath, (line) => logs.value.push(line));
+function startPreview() {
+  runPreviewCommand(project)
 }
 
 onMounted(() => {
@@ -105,10 +108,14 @@ onMounted(() => {
     Blockly.serialization.workspaces.load(state, workspace);
   }
 
-  workspace.addChangeListener(() => {
+  workspace.addChangeListener((event) => {
+    if (!blockEvents.has(event.type)) {
+      return;
+    }
     if (workspace.isDragging()) return; // Don't update while changes are happening.
 
-    saveCode().then(() => {});
+    saveCode().then(() => {
+    });
 
     let state = Blockly.serialization.workspaces.save(workspace);
     localStorage.setItem(STATE_KEY, JSON.stringify(state));
