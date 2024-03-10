@@ -1,6 +1,6 @@
 import {getFullProjectPath} from "../utils/fs.ts";
 import {runCommand} from "../utils/shell.ts";
-import {WebviewWindow} from "@tauri-apps/api/window";
+import {WebviewWindow} from "@tauri-apps/api/webviewWindow";
 
 export async function runPreviewService(project: any, abortController: AbortController) {
   const projectFullPath = await getFullProjectPath(project?.name);

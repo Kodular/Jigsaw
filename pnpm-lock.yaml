@@ -12,8 +12,8 @@ dependencies:
     specifier: ^2.47.0
     version: 2.47.0(vue@3.4.21)
   '@tauri-apps/api':
-    specifier: ^1.5.3
-    version: 1.5.3
+    specifier: 2.0.0-beta.4
+    version: 2.0.0-beta.4
   '@tauri-apps/plugin-fs':
     specifier: 2.0.0-beta.2
     version: 2.0.0-beta.2
@@ -41,12 +41,6 @@ dependencies:
   primevue:
     specifier: ^3.49.1
     version: 3.49.1(vue@3.4.21)
-  tauri-plugin-fs-extra-api:
-    specifier: github:tauri-apps/tauri-plugin-fs-extra#v1
-    version: github.com/tauri-apps/tauri-plugin-fs-extra/f4ded1cd452ef6e5377fb5fb58d2c549496af262
-  tauri-plugin-store-api:
-    specifier: github:tauri-apps/tauri-plugin-store#v1
-    version: github.com/tauri-apps/tauri-plugin-store/6f3daa12c4f69ca1586427307f518c9ad660d168
   vue:
     specifier: ^3.4.21
     version: 3.4.21(typescript@5.4.2)
@@ -464,11 +458,6 @@ packages:
 
   /@tabler/icons@2.47.0:
     resolution: {integrity: sha512-4w5evLh+7FUUiA1GucvGj2ReX2TvOjEr4ejXdwL/bsjoSkof6r1gQmzqI+VHrE2CpJpB3al7bCTulOkFa/RcyA==}
-    dev: false
-
-  /@tauri-apps/api@1.5.3:
-    resolution: {integrity: sha512-zxnDjHHKjOsrIzZm6nO5Xapb/BxqUq1tc7cGkFXsFkGTsSWgCPH1D8mm0XS9weJY2OaR73I3k3S+b7eSzJDfqA==}
-    engines: {node: '>= 14.6.0', npm: '>= 6.6.0', yarn: '>= 1.19.1'}
     dev: false
 
   /@tauri-apps/api@2.0.0-beta.4:
@@ -1459,19 +1448,3 @@ packages:
   /yallist@4.0.0:
     resolution: {integrity: sha512-3wdGidZyq5PB084XLES5TpOSRA3wjXAlIWMhum2kRcv/41Sn2emQ0dycQW4uZXLejwKvg6EsvbdlVL+FYEct7A==}
     dev: true
-
-  github.com/tauri-apps/tauri-plugin-fs-extra/f4ded1cd452ef6e5377fb5fb58d2c549496af262:
-    resolution: {tarball: https://codeload.github.com/tauri-apps/tauri-plugin-fs-extra/tar.gz/f4ded1cd452ef6e5377fb5fb58d2c549496af262}
-    name: tauri-plugin-fs-extra-api
-    version: 0.0.0
-    dependencies:
-      '@tauri-apps/api': 1.5.3
-    dev: false
-
-  github.com/tauri-apps/tauri-plugin-store/6f3daa12c4f69ca1586427307f518c9ad660d168:
-    resolution: {tarball: https://codeload.github.com/tauri-apps/tauri-plugin-store/tar.gz/6f3daa12c4f69ca1586427307f518c9ad660d168}
-    name: tauri-plugin-store-api
-    version: 0.0.0
-    dependencies:
-      '@tauri-apps/api': 1.5.3
-    dev: false
