@@ -23,9 +23,6 @@ dependencies:
   element-plus:
     specifier: ^2.6.1
     version: 2.6.1(vue@3.4.21)
-  livecodes:
-    specifier: ^0.4.0
-    version: 0.4.0
   pinia:
     specifier: ^2.1.7
     version: 2.1.7(typescript@5.4.2)(vue@3.4.21)
@@ -1036,10 +1033,6 @@ packages:
       - bufferutil
       - supports-color
       - utf-8-validate
-    dev: false
-
-  /livecodes@0.4.0:
-    resolution: {integrity: sha512-qtpPC2sq6HyaoW3VXdUAq94USoF1HRJ7sZvBZNiJSzapGPAUI9ZcXAr3NBZGfQ/pjt81YD4aKiozg1vr8Ci93w==}
     dev: false
 
   /lodash-es@4.17.21:

@@ -6,7 +6,7 @@ import Editor from "./Editor.vue";
 
 const route = useRoute();
 
-const {state: project, isLoading} = useAsyncState(() => getProject(route.params.id), null);
+const {state: project, isLoading} = useAsyncState(() => getProject(route.params.id as string), null);
 
 </script>
 

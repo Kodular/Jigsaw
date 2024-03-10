@@ -18,7 +18,7 @@ export async function runPreviewCommand(project: any) {
     userAgent: 'Mozilla/5.0 (Linux; Android 14) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.6261.105 Mobile Safari/537.36'
   });
 
-  previewWindow.onCloseRequested((e) => {
+  previewWindow.onCloseRequested(() => {
     console.log("Aborting preview")
     abortController.abort();
   });
@@ -26,7 +26,7 @@ export async function runPreviewCommand(project: any) {
   previewWindow.once('tauri://created', function () {
     console.log("webview window successfully created");
   })
-  previewWindow.once('tauri://error', function (e) {
+  previewWindow.once('tauri://error', function () {
     console.log("an error occurred during webview window creation");
   })
 

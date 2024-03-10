@@ -13,7 +13,6 @@
         <ButtonGroup>
           <Button>Build</Button>
           <Button @click="startPreview">Preview</Button>
-          <Button @click="showLogs = true">Logs</Button>
           <Button @click="saveCode">Save</Button>
         </ButtonGroup>
       </template>
@@ -36,16 +35,11 @@ import Toolbar from 'primevue/toolbar';
 import Button from 'primevue/button';
 import ButtonGroup from 'primevue/buttongroup';
 import BlocklyComponent from "./components/BlocklyComponent.vue";
-import Sidebar from 'primevue/sidebar';
-import toolbox from "./blocks/toolbox";
-import "./blocks/jigsaw";
+import toolbox from "./blocks/toolbox.ts";
+import "./blocks/jigsaw.ts";
 import * as Blockly from "blockly";
 import {generateAppCode} from "./blocks/codegen.ts";
 import {onMounted, ref} from "vue";
-import {runCommand} from "./utils/shell.ts";
-import {getFullProjectPath} from "./utils/fs.ts";
-import {useToast} from 'primevue/usetoast';
-import {WebviewWindow} from "@tauri-apps/api/window";
 import {runPreviewCommand} from "./commands/preview.ts";
 
 const props = defineProps<{
@@ -84,10 +78,6 @@ const blockEvents = new Set([
 ]);
 
 const blocklyEl = ref<typeof BlocklyComponent | null>(null);
-const showLogs = ref(false);
-const logs = ref<string[]>([]);
-
-const toast = useToast();
 
 async function saveCode() {
   if (project && blocklyEl.value?.workspace) {
@@ -108,7 +98,7 @@ onMounted(() => {
     Blockly.serialization.workspaces.load(state, workspace);
   }
 
-  workspace.addChangeListener((event) => {
+  workspace.addChangeListener((event: Blockly.Events.Abstract) => {
     if (!blockEvents.has(event.type)) {
       return;
     }

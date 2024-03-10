@@ -10,13 +10,13 @@ const {state: projects, isLoading} = useAsyncState(getProjects, []);
 <template>
   <p>Your Projects</p>
   <p v-if="isLoading">Loading...</p>
-  <div v-else v-for="project in projects">
-    <RouterLink :to="`/project/${project[0]}`">
+  <div v-else v-for="[projectId, project] in projects">
+    <RouterLink :to="`/project/${projectId}`">
       <Card>
-        <template #title>{{ project[0] }}</template>
+        <template #title>{{ projectId }}</template>
         <template #content>
           <p class="m-0">
-            Project {{ project[1].name }}
+            Project {{ (project as any)?.name }}
           </p>
         </template>
       </Card>

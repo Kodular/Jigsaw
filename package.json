@@ -16,7 +16,6 @@
     "@vueuse/core": "^10.9.0",
     "blockly": "^10.4.2",
     "element-plus": "^2.6.1",
-    "livecodes": "^0.4.0",
     "pinia": "^2.1.7",
     "primevue": "^3.49.1",
     "tauri-plugin-fs-extra-api": "github:tauri-apps/tauri-plugin-fs-extra#v1",
