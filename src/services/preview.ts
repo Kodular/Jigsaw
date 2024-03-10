@@ -2,11 +2,9 @@ import {getFullProjectPath} from "../utils/fs.ts";
 import {runCommand} from "../utils/shell.ts";
 import {WebviewWindow} from "@tauri-apps/api/window";
 
-export async function runPreviewCommand(project: any) {
+export async function runPreviewService(project: any, abortController: AbortController) {
   const projectFullPath = await getFullProjectPath(project?.name);
   await runCommand("pnpm", ["install"], projectFullPath);
-
-  const abortController = new AbortController();
 
   const pnpmDevCmd = runCommand("pnpm", ["dev"], projectFullPath, abortController.signal);
 
@@ -29,6 +27,11 @@ export async function runPreviewCommand(project: any) {
   previewWindow.once('tauri://error', function () {
     console.log("an error occurred during webview window creation");
   })
+
+  abortController.signal?.addEventListener('abort', () => {
+    console.log('closing preview');
+    previewWindow.close();
+  });
 
   await pnpmDevCmd;
 }

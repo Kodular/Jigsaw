@@ -39,8 +39,8 @@ import toolbox from "./blocks/toolbox.ts";
 import "./blocks/jigsaw.ts";
 import * as Blockly from "blockly";
 import {generateAppCode} from "./blocks/codegen.ts";
-import {onMounted, ref} from "vue";
-import {runPreviewCommand} from "./commands/preview.ts";
+import {onMounted, onUnmounted, ref} from "vue";
+import {runPreviewService} from "./services/preview.ts";
 
 const props = defineProps<{
   project: any
@@ -78,6 +78,7 @@ const blockEvents = new Set([
 ]);
 
 const blocklyEl = ref<typeof BlocklyComponent | null>(null);
+const abortControllerForPreviewService = new AbortController();
 
 async function saveCode() {
   if (project && blocklyEl.value?.workspace) {
@@ -86,7 +87,7 @@ async function saveCode() {
 }
 
 function startPreview() {
-  runPreviewCommand(project)
+  runPreviewService(project, abortControllerForPreviewService)
 }
 
 onMounted(() => {
@@ -111,6 +112,12 @@ onMounted(() => {
     localStorage.setItem(STATE_KEY, JSON.stringify(state));
   });
 });
+
+onUnmounted(async() => {
+  abortControllerForPreviewService.abort();
+  await saveCode();
+  blocklyEl.value?.workspace.dispose();
+})
 </script>
 
 <style>
