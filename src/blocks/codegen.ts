@@ -1,5 +1,5 @@
 import {javascriptGenerator} from "blockly/javascript";
-import {BaseDirectory, createDir, writeTextFile} from '@tauri-apps/api/fs';
+import {BaseDirectory, mkdir, writeTextFile} from '@tauri-apps/plugin-fs';
 import {dirname, join} from "@tauri-apps/api/path";
 import Blockly from "blockly";
 
@@ -127,11 +127,11 @@ export default defineConfig({
 
     console.log(filePath, parentPath);
 
-    await createDir(parentPath, {dir: BaseDirectory.Home, recursive: true});
+    await mkdir(parentPath, {baseDir: BaseDirectory.Home, recursive: true});
     await writeTextFile(
       filePath,
       fileContent,
-      {dir: BaseDirectory.Home}
+      {baseDir: BaseDirectory.Home}
     );
   }
 }

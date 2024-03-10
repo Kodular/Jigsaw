@@ -1,15 +1,15 @@
-import {Command} from "@tauri-apps/api/shell";
-import {platform} from '@tauri-apps/api/os';
+import {Command} from "@tauri-apps/plugin-shell";
+import {platform} from '@tauri-apps/plugin-os';
 
 export async function runCommand(program: string, args: string[], cwd: string, abortSignal?: AbortSignal) {
   return new Promise(async (resolve, reject) => {
     const platformName = await platform();
 
     let command;
-    if (platformName === 'win32') {
-      command = new Command('cmd', ['/C', `${program} ${args.join(' ')}`], {cwd});
+    if (platformName === 'windows') {
+      command = Command.create('cmd', ['/C', `${program} ${args.join(' ')}`], {cwd});
     } else {
-      command = new Command(program, args, {cwd});
+      command = Command.create(program, args, {cwd});
     }
 
     command.on('close', data => resolve(data));

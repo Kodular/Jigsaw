@@ -1,4 +1,4 @@
-import {Store} from "tauri-plugin-store-api";
+import {Store} from "@tauri-apps/plugin-store";
 
 const projectsStore = new Store("projects");
 try {
