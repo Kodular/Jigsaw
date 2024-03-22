@@ -12,8 +12,8 @@ dependencies:
     specifier: ^3.1.0
     version: 3.1.0(vue@3.4.21)
   '@tauri-apps/api':
-    specifier: 2.0.0-beta.4
-    version: 2.0.0-beta.4
+    specifier: 2.0.0-beta.6
+    version: 2.0.0-beta.6
   '@tauri-apps/plugin-fs':
     specifier: 2.0.0-beta.2
     version: 2.0.0-beta.2
@@ -32,6 +32,9 @@ dependencies:
   blockly:
     specifier: ^10.4.3
     version: 10.4.3
+  dayjs:
+    specifier: ^1.11.10
+    version: 1.11.10
   element-plus:
     specifier: ^2.6.1
     version: 2.6.1(vue@3.4.21)
@@ -465,6 +468,11 @@ packages:
     engines: {node: '>= 18', npm: '>= 6.6.0', yarn: '>= 1.19.1'}
     dev: false
 
+  /@tauri-apps/api@2.0.0-beta.6:
+    resolution: {integrity: sha512-ay3kAXYQoqC3rX4Vr3y6uGwrBhRPM7UQqZ9wr1VYzN6lkcMIcu7+UBvytmcfXDlVctqFoMQJafn6+dK/Oqh8+Q==}
+    engines: {node: '>= 18', npm: '>= 6.6.0', yarn: '>= 1.19.1'}
+    dev: false
+
   /@tauri-apps/cli-darwin-arm64@2.0.0-beta.8:
     resolution: {integrity: sha512-mE+4uA9ZWkZqzr51V+wybFfsbYh6748IAcbpUM7C78H0vIgdm0lQe4jKK7rp1UCFQvpqRBv7OBq5cCKKK0I0Tg==}
     engines: {node: '>= 10'}
@@ -678,7 +686,7 @@ packages:
       '@vue/shared': 3.4.21
       estree-walker: 2.0.2
       magic-string: 0.30.8
-      postcss: 8.4.37
+      postcss: 8.4.38
       source-map-js: 1.2.0
 
   /@vue/compiler-ssr@3.4.21:
@@ -1173,8 +1181,8 @@ packages:
       vue-demi: 0.14.7(vue@3.4.21)
     dev: false
 
-  /postcss@8.4.37:
-    resolution: {integrity: sha512-7iB/v/r7Woof0glKLH8b1SPHrsX7uhdO+Geb41QpF/+mWZHU3uxxSlN+UXGVit1PawOYDToO+AbZzhBzWRDwbQ==}
+  /postcss@8.4.38:
+    resolution: {integrity: sha512-Wglpdk03BSfXkHoQa3b/oulrotAkwrlLDRSOb9D0bN86FdRyE9lppSp33aHNPgBa0JKCoB+drFLZkQoRRYae5A==}
     engines: {node: ^10 || ^12 || >=14}
     dependencies:
       nanoid: 3.3.7
@@ -1327,7 +1335,7 @@ packages:
         optional: true
     dependencies:
       esbuild: 0.20.2
-      postcss: 8.4.37
+      postcss: 8.4.38
       rollup: 4.13.0
     optionalDependencies:
       fsevents: 2.3.3

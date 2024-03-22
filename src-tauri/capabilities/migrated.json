@@ -107,6 +107,7 @@
     "store:allow-get",
     "store:allow-set",
     "store:allow-load",
-    "store:allow-entries"
+    "store:allow-entries",
+    "store:allow-values"
   ]
 }

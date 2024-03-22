@@ -6,6 +6,7 @@ import Home from "./Home.vue";
 import App from "./App.vue";
 import Project from "./Project.vue";
 import ToastService from 'primevue/toastservice';
+import DialogService from 'primevue/dialogservice';
 
 const routes = [
   {path: '/', component: Home},
@@ -21,4 +22,5 @@ let app = createApp(App)
 app.use(router);
 app.use(PrimeVue);
 app.use(ToastService);
+app.use(DialogService);
 app.mount("#app");
