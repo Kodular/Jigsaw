@@ -4,6 +4,7 @@ export default {
         {
             "kind": "category",
             "name": "Control",
+            colour: "%{BKY_CONTROLS_HUE}",
             "contents": [
                 {
                     "kind": "block",
@@ -14,6 +15,7 @@ export default {
         {
             "kind": "category",
             "name": "Logic",
+            colour: "%{BKY_LOGIC_HUE}",
             "contents": [
                 {
                     "kind": "block",
@@ -36,6 +38,7 @@ export default {
         {
             kind: "category",
             name: "Loops",
+            colour: "%{BKY_LOOPS_HUE}",
             contents: [
                 {
                     kind: "block",
@@ -62,6 +65,7 @@ export default {
         {
             kind: "category",
             name: "Math",
+            colour: "%{BKY_MATH_HUE}",
             contents: [
                 {
                     kind: "block",
@@ -196,6 +200,7 @@ export default {
         {
             kind: "category",
             name: "Text",
+            colour: "%{BKY_TEXTS_HUE}",
             contents: [
                 {
                     kind: "block",
@@ -217,27 +222,12 @@ export default {
                         }
                     }
                 },
-                {
-                    kind: "block",
-                    type: "text_print",
-                    values: {
-                        TEXT: {
-                            kind: "block",
-                            type: "text",
-                            fields: {
-                                TEXT: {
-                                    kind: "field_input",
-                                    value: "abc"
-                                }
-                            }
-                        }
-                    }
-                }
             ]
         },
         {
             kind: "category",
             name: "Lists",
+            colour: "%{BKY_LISTS_HUE}",
             contents: [
                 {
                     kind: "block",
@@ -342,9 +332,11 @@ export default {
             "custom": "PROCEDURE"
         },
         {
+            kind: "sep"
+        },
+        {
             kind: "category",
             name: "Components",
-            colour: "%{BKY_LOOPS_HUE}",
             contents: [
                 {
                     kind: "block",
@@ -371,6 +363,6 @@ export default {
                     type: "jigsaw_toast"
                 }
             ]
-        }
+        },
     ]
 }

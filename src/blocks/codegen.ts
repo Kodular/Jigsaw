@@ -20,10 +20,10 @@ async function writeProjectFiles(projectName: string, projectPath: string, code:
   const files = {
     // language=Vue
     'src/App.vue': `
-      <script setup>
-        import * as Ionic from '@ionic/vue';
+<script setup>
+import * as Ionic from '@ionic/vue';
 
-        ${code}
+${code}
     `,
     'src/main.js': `
 import { createApp } from 'vue'
