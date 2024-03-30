@@ -21,7 +21,7 @@ async function writeProjectFiles(projectName: string, projectPath: string, code:
     // language=Vue
     'src/App.vue': `
       <script setup>
-        import {IonApp, IonButton, IonInput, IonText} from '@ionic/vue';
+        import * as Ionic from '@ionic/vue';
 
         ${code}
     `,

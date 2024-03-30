@@ -343,7 +343,7 @@ export default {
         },
         {
             kind: "category",
-            name: "Jigsaw",
+            name: "Components",
             colour: "%{BKY_LOOPS_HUE}",
             contents: [
                 {
@@ -365,6 +365,10 @@ export default {
                 {
                     kind: "block",
                     type: "jigsaw_input"
+                },
+                {
+                    kind: "block",
+                    type: "jigsaw_toast"
                 }
             ]
         }
