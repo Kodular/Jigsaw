@@ -78,7 +78,7 @@ const blockEvents = new Set([
 ]);
 
 const blocklyEl = ref<typeof BlocklyComponent | null>(null);
-const abortControllerForPreviewService = new AbortController();
+const abortControllerForPreviewService = ref<AbortController | null>(null);
 
 async function saveCode() {
   if (project && blocklyEl.value?.workspace) {
@@ -87,7 +87,12 @@ async function saveCode() {
 }
 
 function startPreview() {
-  runPreviewService(project, abortControllerForPreviewService)
+  if (abortControllerForPreviewService.value && !abortControllerForPreviewService.value.signal.aborted) {
+    return;
+  }
+  const ac = new AbortController();
+  runPreviewService(project, ac);
+  abortControllerForPreviewService.value = ac;
 }
 
 onMounted(() => {
@@ -114,7 +119,7 @@ onMounted(() => {
 });
 
 onUnmounted(async() => {
-  abortControllerForPreviewService.abort();
+  abortControllerForPreviewService.value?.abort();
   await saveCode();
   blocklyEl.value?.workspace.dispose();
 })
