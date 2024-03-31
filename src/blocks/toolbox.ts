@@ -321,11 +321,11 @@ export default {
             custom: "VARIABLE",
             colour: "%{BKY_VARIABLES_HUE}"
         },
-        {
-            "kind": "category",
-            "name": "Variables",
-            "custom": "VARIABLE_DYNAMIC"
-        },
+        // {
+        //     "kind": "category",
+        //     "name": "Variables",
+        //     "custom": "VARIABLE_DYNAMIC"
+        // },
         {
             "kind": "category",
             "name": "Functions",

@@ -1,5 +1,5 @@
 import * as Blockly from "blockly/core";
-import {javascriptGenerator, Order} from "blockly/javascript";
+import {JavascriptGenerator, javascriptGenerator, Order} from "blockly/javascript";
 
 import {blocks, registerProcedureSerializer, unregisterProcedureBlocks} from '@blockly/block-shareable-procedures';
 
@@ -152,70 +152,86 @@ Blockly.defineBlocksWithJsonArray([
 //   return code;
 // };
 
-javascriptGenerator.forBlock["jigsaw_app"] = function (block: Blockly.Block, generator: any) {
+javascriptGenerator.forBlock["jigsaw_app"] = function (block: Blockly.Block, generator: JavascriptGenerator) {
     const statements_children = generator.statementToCode(block, 'CHILDREN');
     const code = `</script><template>
-  <Ionic.IonApp>
-    ${statements_children}
-  </Ionic.IonApp>
+<Ionic.IonApp>
+${statements_children}
+</Ionic.IonApp>
 </template>`;
     return code;
 };
 
-javascriptGenerator.forBlock['jigsaw_text'] = function (block: Blockly.Block, generator: any) {
+javascriptGenerator.forBlock['jigsaw_text'] = function (block: Blockly.Block, generator: JavascriptGenerator) {
     const text = generator.valueToCode(block, 'TEXT', Order.ATOMIC);
     const code = `<Ionic.IonText><p>{{ ${text} }}</p></Ionic.IonText>\n`;
     return code;
 };
 
-javascriptGenerator.forBlock["jigsaw_button"] = function (block: Blockly.Block, generator: any) {
+javascriptGenerator.forBlock["jigsaw_button"] = function (block: Blockly.Block, generator: JavascriptGenerator) {
     const statements_onclick = generator.statementToCode(block, 'ONCLICK');
     const statements_children = generator.statementToCode(block, 'CHILDREN');
 
     const id = crypto.randomUUID()
 
-    console.log(statements_onclick)
-
     const functionName = generator.provideFunction_(
         `button${id}_click`,
         `function ${generator.FUNCTION_NAME_PLACEHOLDER_}(event) {
-        ${statements_onclick}
-        }`
+${statements_onclick}
+}`
     );
 
     const code = `<Ionic.IonButton @click="${functionName}">\n${statements_children}</Ionic.IonButton>\n`;
     return code;
 };
 
-javascriptGenerator.forBlock['jigsaw_flex'] = function (block: Blockly.Block, generator: any) {
+javascriptGenerator.forBlock['jigsaw_flex'] = function (block: Blockly.Block, generator: JavascriptGenerator) {
     const dropdown_flex_dir = block.getFieldValue('FLEX_DIR');
     const statements_items = generator.statementToCode(block, 'ITEMS');
     const code = `<div style="display:flex;flex-direction:${dropdown_flex_dir};">\n${statements_items}</div>\n`;
     return code;
 };
 
-javascriptGenerator.forBlock['jigsaw_input'] = function (block: Blockly.Block, generator: any) {
+javascriptGenerator.forBlock['jigsaw_input'] = function (block: Blockly.Block, generator: JavascriptGenerator) {
     const value_state = generator.valueToCode(block, 'LABEL', Order.ATOMIC);
     const code = `<Ionic.IonInput :label="${value_state}"></Ionic.IonInput>\n`;
     return code;
 };
 
-javascriptGenerator.forBlock['jigsaw_toast'] = function (block: Blockly.Block, generator: any) {
+javascriptGenerator.forBlock['jigsaw_toast'] = function (block: Blockly.Block, generator: JavascriptGenerator) {
     const message = generator.valueToCode(block, 'MESSAGE', Order.ATOMIC);
     const duration = generator.valueToCode(block, 'DURATION', Order.ATOMIC);
 
+    // TODO: make a Jigsaw stdlib
     const functionName = generator.provideFunction_(
         'show_toast',
         `async function ${generator.FUNCTION_NAME_PLACEHOLDER_}(message, duration) {
-        const toast = await Ionic.toastController.create({
-          message,
-          duration,
-          position: 'bottom',
-        });
-
-        await toast.present();
-      }`
+    const toast = await Ionic.toastController.create({
+      message,
+      duration,
+      position: 'bottom',
+    });
+    
+    await toast.present();
+}`
     );
 
     return `${functionName}(${message}, ${duration})`
 }
+
+// TODO: temporary way to make the variables reactive.
+//  Try to separate normal variable from reactive/state variables.
+/*
+javascriptGenerator.forBlock['variables_set'] = function (block: Blockly.Block, generator: JavascriptGenerator) {
+    const var_name = generator.getVariableName(block.getFieldValue("VAR"))
+    const var_value = generator.valueToCode(block, 'VALUE', Order.ATOMIC);
+
+    return `${var_name}.value = ${var_value};\n`
+}
+
+javascriptGenerator.forBlock['variables_get'] = function (block: Blockly.Block, generator: JavascriptGenerator) {
+    const var_name = generator.getVariableName(block.getFieldValue("VAR"))
+
+    return [`${var_name}.value`, Order.ATOMIC]
+}
+*/

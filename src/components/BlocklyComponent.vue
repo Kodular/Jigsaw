@@ -1,33 +1,37 @@
 <script setup>
-import { onMounted, ref, shallowRef } from "vue";
+import {onMounted, ref, shallowRef} from "vue";
 import Blockly from "blockly";
-import { ElMessage, ElMessageBox } from 'element-plus'
+import {LexicalVariablesPlugin} from '@mit-app-inventor/blockly-block-lexical-variables';
+import {ElMessage, ElMessageBox} from 'element-plus'
 import 'element-plus/dist/index.css'
 
 const props = defineProps(["options"]);
 const blocklyDiv = ref();
 const workspace = shallowRef();
 
-defineExpose({ workspace });
+defineExpose({workspace});
 
 Blockly.dialog.setAlert((title, callback) => {
   ElMessageBox.alert(title, 'Blockly')
-    .then(() => callback())
+      .then(() => callback())
 })
 
 Blockly.dialog.setConfirm((title, callback) => {
   ElMessageBox.confirm(title, 'Blockly')
-    .then(() => callback(true))
-    .catch(() => callback(false))
+      .then(() => callback(true))
+      .catch(() => callback(false))
 })
 
 Blockly.dialog.setPrompt((title, defaultValue, callback) => {
   ElMessageBox.prompt(title, 'Blockly')
-    .then(({ value }) => callback(value ?? defaultValue))
+      .then(({value}) => callback(value ?? defaultValue))
 })
 
 onMounted(() => {
-  workspace.value = Blockly.inject(blocklyDiv.value, props.options);
+  const ws = Blockly.inject(blocklyDiv.value, props.options);
+  LexicalVariablesPlugin.init(ws);
+
+  workspace.value = ws;
 });
 </script>
 
