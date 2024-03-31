@@ -2,11 +2,14 @@ import {javascriptGenerator} from "blockly/javascript";
 import {BaseDirectory, mkdir, writeTextFile} from '@tauri-apps/plugin-fs';
 import {dirname, join} from "@tauri-apps/api/path";
 import Blockly from "blockly";
+import "./jigsaw.ts";
+import {vueGenerator} from "./VueGenerator.ts";
 
 const JIGSAW_PROJECTS_DIR = './JigsawProjects'
 
 export async function generateAppCode(projectName: string, workspace: Blockly.Workspace) {
-  const code = javascriptGenerator.workspaceToCode(workspace);
+  // const code = javascriptGenerator.workspaceToCode(workspace);
+  const code = vueGenerator.workspaceToCode(workspace);
 
   const projectPath = await join(JIGSAW_PROJECTS_DIR, projectName);
 
@@ -21,6 +24,7 @@ async function writeProjectFiles(projectName: string, projectPath: string, code:
     // language=Vue
     'src/App.vue': `
 <script setup>
+import {ref, reactive} from 'vue';
 import * as Ionic from '@ionic/vue';
 
 ${code}

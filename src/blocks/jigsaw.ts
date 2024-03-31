@@ -2,6 +2,7 @@ import * as Blockly from "blockly/core";
 import {JavascriptGenerator, javascriptGenerator, Order} from "blockly/javascript";
 
 import {blocks, registerProcedureSerializer, unregisterProcedureBlocks} from '@blockly/block-shareable-procedures';
+import {vueGenerator} from "./VueGenerator.ts";
 
 unregisterProcedureBlocks();
 Blockly.common.defineBlocks(blocks);
@@ -152,7 +153,7 @@ Blockly.defineBlocksWithJsonArray([
 //   return code;
 // };
 
-javascriptGenerator.forBlock["jigsaw_app"] = function (block: Blockly.Block, generator: JavascriptGenerator) {
+vueGenerator.forBlock["jigsaw_app"] = function (block: Blockly.Block, generator: JavascriptGenerator) {
     const statements_children = generator.statementToCode(block, 'CHILDREN');
     const code = `</script><template>
 <Ionic.IonApp>
@@ -162,13 +163,13 @@ ${statements_children}
     return code;
 };
 
-javascriptGenerator.forBlock['jigsaw_text'] = function (block: Blockly.Block, generator: JavascriptGenerator) {
+vueGenerator.forBlock['jigsaw_text'] = function (block: Blockly.Block, generator: JavascriptGenerator) {
     const text = generator.valueToCode(block, 'TEXT', Order.ATOMIC);
     const code = `<Ionic.IonText><p>{{ ${text} }}</p></Ionic.IonText>\n`;
     return code;
 };
 
-javascriptGenerator.forBlock["jigsaw_button"] = function (block: Blockly.Block, generator: JavascriptGenerator) {
+vueGenerator.forBlock["jigsaw_button"] = function (block: Blockly.Block, generator: JavascriptGenerator) {
     const statements_onclick = generator.statementToCode(block, 'ONCLICK');
     const statements_children = generator.statementToCode(block, 'CHILDREN');
 
@@ -185,20 +186,20 @@ ${statements_onclick}
     return code;
 };
 
-javascriptGenerator.forBlock['jigsaw_flex'] = function (block: Blockly.Block, generator: JavascriptGenerator) {
+vueGenerator.forBlock['jigsaw_flex'] = function (block: Blockly.Block, generator: JavascriptGenerator) {
     const dropdown_flex_dir = block.getFieldValue('FLEX_DIR');
     const statements_items = generator.statementToCode(block, 'ITEMS');
     const code = `<div style="display:flex;flex-direction:${dropdown_flex_dir};">\n${statements_items}</div>\n`;
     return code;
 };
 
-javascriptGenerator.forBlock['jigsaw_input'] = function (block: Blockly.Block, generator: JavascriptGenerator) {
+vueGenerator.forBlock['jigsaw_input'] = function (block: Blockly.Block, generator: JavascriptGenerator) {
     const value_state = generator.valueToCode(block, 'LABEL', Order.ATOMIC);
     const code = `<Ionic.IonInput :label="${value_state}"></Ionic.IonInput>\n`;
     return code;
 };
 
-javascriptGenerator.forBlock['jigsaw_toast'] = function (block: Blockly.Block, generator: JavascriptGenerator) {
+vueGenerator.forBlock['jigsaw_toast'] = function (block: Blockly.Block, generator: JavascriptGenerator) {
     const message = generator.valueToCode(block, 'MESSAGE', Order.ATOMIC);
     const duration = generator.valueToCode(block, 'DURATION', Order.ATOMIC);
 
@@ -221,17 +222,15 @@ javascriptGenerator.forBlock['jigsaw_toast'] = function (block: Blockly.Block, g
 
 // TODO: temporary way to make the variables reactive.
 //  Try to separate normal variable from reactive/state variables.
-/*
-javascriptGenerator.forBlock['variables_set'] = function (block: Blockly.Block, generator: JavascriptGenerator) {
+vueGenerator.forBlock['variables_set'] = function (block: Blockly.Block, generator: JavascriptGenerator) {
     const var_name = generator.getVariableName(block.getFieldValue("VAR"))
     const var_value = generator.valueToCode(block, 'VALUE', Order.ATOMIC);
 
-    return `${var_name}.value = ${var_value};\n`
+    return `state.${var_name} = ${var_value};\n`
 }
 
-javascriptGenerator.forBlock['variables_get'] = function (block: Blockly.Block, generator: JavascriptGenerator) {
+vueGenerator.forBlock['variables_get'] = function (block: Blockly.Block, generator: JavascriptGenerator) {
     const var_name = generator.getVariableName(block.getFieldValue("VAR"))
 
-    return [`${var_name}.value`, Order.ATOMIC]
+    return [`state.${var_name}`, Order.ATOMIC]
 }
-*/
