@@ -14,8 +14,8 @@ export async function runCommand(program: string, args: string[], cwd: string, a
 
         command.on('close', data => resolve(data));
         command.on('error', error => reject(error));
-        command.stdout.on('data', line => console.info(`stdout: ${line.trim()}`));
-        command.stderr.on('data', line => console.error(`stderr: ${line.trim()}`));
+        command.stdout.on('data', line => console.info(`${program}: ${line.trim()}`));
+        command.stderr.on('data', line => console.warn(`${program}: ${line.trim()}`));
 
         const child = await command.spawn();
         console.log('pid:', child.pid);

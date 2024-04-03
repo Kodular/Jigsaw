@@ -5,9 +5,9 @@ import {Project} from "../models/Project.ts";
 
 export async function runPreviewService(project: Project, abortController: AbortController) {
     const projectFullPath = await getFullProjectPath(project.name);
-    await runCommand("pnpm", ["install"], projectFullPath);
+    await runCommand("bun", ["install"], projectFullPath);
 
-    const pnpmDevCmd = runCommand("npm", ["run", "dev"], projectFullPath, abortController.signal);
+    const viteDevServerCmd = runCommand("bun", ["run", "dev"], projectFullPath, abortController.signal);
 
     const previewWindow = new WebviewWindow('preview-window', {
         url: 'http://localhost:2410',
@@ -39,7 +39,7 @@ export async function runPreviewService(project: Project, abortController: Abort
         once: true
     });
 
-    await pnpmDevCmd;
+    await viteDevServerCmd;
 
     unlisten();
 }
