@@ -82,8 +82,8 @@
         },
         {
           "args": true,
-          "cmd": "pnpm",
-          "name": "pnpm",
+          "cmd": "bun",
+          "name": "bun",
           "sidecar": false
         }
       ]
