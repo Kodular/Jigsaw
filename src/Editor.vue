@@ -54,6 +54,7 @@ import BlocklyComponent from "./components/BlocklyComponent.vue";
 import toolbox from "./blocks/toolbox.ts";
 import "./blocks/jigsaw.ts";
 import * as Blockly from "blockly";
+//@ts-ignore
 import DarkTheme from '@blockly/theme-dark';
 import {generateAppCode} from "./blocks/codegen.ts";
 import {onMounted, onUnmounted, ref} from "vue";

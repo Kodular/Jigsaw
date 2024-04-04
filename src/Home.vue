@@ -95,7 +95,7 @@ function deleteProjectAction(projectId: string) {
     <ProgressSpinner/>
   </template>
   <template v-else-if="projects.length">
-    <DataView :value="projects">
+    <DataView :value="projects" data-key="id">
       <template #list="{items}">
         <template v-for="project in items" :key="project.id">
           <Card style="width: 300px;">

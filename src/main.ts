@@ -21,7 +21,7 @@ const router = createRouter({
 
 let app = createApp(App)
 app.use(router);
-app.use(PrimeVueStyled);
+app.use(PrimeVueStyled as any);
 app.use(ToastService);
 app.use(DialogService);
 app.use(ConfirmationService);
