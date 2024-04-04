@@ -2,8 +2,8 @@
 import {inject, Ref, ref} from "vue";
 import InputText from "primevue/inputtext";
 import Button from "primevue/button";
-import {createProject} from "../data/projects.ts";
-import type { DynamicDialogInstance } from 'primevue/dynamicdialogoptions'
+import type {DynamicDialogInstance} from 'primevue/dynamicdialogoptions'
+import {Project} from "../models/Project.ts";
 
 const emit = defineEmits(['onCancel'])
 
@@ -12,7 +12,8 @@ const dialogRef = inject<Ref<DynamicDialogInstance>>('dialogRef');
 const projectName = ref('')
 
 async function onCreate() {
-  await createProject(projectName.value);
+  const newProject = new Project(projectName.value);
+  await newProject.save();
 
   closeDialog();
 }

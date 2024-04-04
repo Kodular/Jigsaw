@@ -63,9 +63,10 @@ import TablerTools from '~icons/tabler/tools'
 import TablerEye from '~icons/tabler/eye'
 import TablerDeviceFloppy from '~icons/tabler/device-floppy'
 import {useDark} from "@vueuse/core";
+import {Project} from "./models/Project.ts";
 
 const props = defineProps<{
-  project: any
+  project: Project
 }>();
 
 const project = props.project;
@@ -121,9 +122,7 @@ function startPreview() {
 
 onMounted(() => {
   const workspace = blocklyEl.value?.workspace;
-  const STATE_KEY = "workspace-state";
-
-  const state = JSON.parse(localStorage.getItem(STATE_KEY) as string);
+  const state = project.workspaceState;
   if (state) {
     Blockly.serialization.workspaces.load(state, workspace);
   }
@@ -137,8 +136,8 @@ onMounted(() => {
     saveCode().then(() => {
     });
 
-    let state = Blockly.serialization.workspaces.save(workspace);
-    localStorage.setItem(STATE_KEY, JSON.stringify(state));
+    project.workspaceState = Blockly.serialization.workspaces.save(workspace);
+    project.save();
   });
 });
 

@@ -15,7 +15,6 @@ import dayjs from "dayjs";
 import RelativeTime from "dayjs/plugin/relativeTime"
 import TablerUpload from '~icons/tabler/upload'
 import TablerPlus from '~icons/tabler/plus'
-import {Project} from "./models/Project.ts";
 import {open} from '@tauri-apps/plugin-shell'
 import {homeDir, join} from "@tauri-apps/api/path";
 
@@ -40,7 +39,7 @@ function openNewProjectDialog() {
 }
 
 async function showInFolderAction(projectId: string) {
-  const project = Project.fromJson(await getProjectById(projectId))
+  const project = await getProjectById(projectId);
   let path = await join(await homeDir(), project.path);
   await open(path)
 }
