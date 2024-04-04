@@ -2,7 +2,11 @@
   <div style="height:calc(100vh - 40px);">
     <Toolbar>
       <template #start>
-        <Button @click="$router.back()">Back to Projects</Button>
+        <Button @click="$router.back()" title="Back to projects">
+          <template #icon>
+            <TablerArrowLeft/>
+          </template>
+        </Button>
       </template>
 
       <template #center>
@@ -11,9 +15,21 @@
 
       <template #end>
         <ButtonGroup>
-          <Button>Build</Button>
-          <Button @click="startPreview">Preview</Button>
-          <Button @click="saveCode">Save</Button>
+          <Button title="Build project">
+            <template #icon>
+              <TablerTools />
+            </template>
+          </Button>
+          <Button @click="startPreview" title="Preview app">
+            <template #icon>
+              <TablerEye />
+            </template>
+          </Button>
+          <Button @click="saveCode" title="Save project">
+            <template #icon>
+              <TablerDeviceFloppy />
+            </template>
+          </Button>
         </ButtonGroup>
       </template>
     </Toolbar>
@@ -38,15 +54,23 @@ import BlocklyComponent from "./components/BlocklyComponent.vue";
 import toolbox from "./blocks/toolbox.ts";
 import "./blocks/jigsaw.ts";
 import * as Blockly from "blockly";
+import DarkTheme from '@blockly/theme-dark';
 import {generateAppCode} from "./blocks/codegen.ts";
 import {onMounted, onUnmounted, ref} from "vue";
 import {runPreviewService} from "./services/preview.ts";
+import TablerArrowLeft from '~icons/tabler/arrow-left'
+import TablerTools from '~icons/tabler/tools'
+import TablerEye from '~icons/tabler/eye'
+import TablerDeviceFloppy from '~icons/tabler/device-floppy'
+import {useDark} from "@vueuse/core";
 
 const props = defineProps<{
   project: any
 }>();
 
 const project = props.project;
+
+const isDark = useDark()
 
 const options = {
   // media: "media/",
@@ -65,7 +89,7 @@ const options = {
     scaleSpeed: 1.2
   },
   renderer: 'thrasos',
-  theme: 'zelos',
+  theme: isDark ? DarkTheme : 'zelos',
   toolbox
 };
 
@@ -118,7 +142,7 @@ onMounted(() => {
   });
 });
 
-onUnmounted(async() => {
+onUnmounted(async () => {
   abortControllerForPreviewService.value?.abort();
   await saveCode();
   blocklyEl.value?.workspace.dispose();
@@ -126,10 +150,6 @@ onUnmounted(async() => {
 </script>
 
 <style>
-html {
-  font-size: 10px;
-}
-
 body {
   margin: 0;
   padding: 0;

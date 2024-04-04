@@ -108,6 +108,8 @@
     "store:allow-set",
     "store:allow-load",
     "store:allow-entries",
-    "store:allow-values"
+    "store:allow-values",
+    "store:allow-delete",
+    "store:allow-save"
   ]
 }

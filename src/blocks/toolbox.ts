@@ -4,7 +4,7 @@ export default {
         {
             "kind": "category",
             "name": "Control",
-            colour: "%{BKY_CONTROLS_HUE}",
+            colour: "%{BKY_CONTROL_HUE}",
             "contents": [
                 {
                     "kind": "block",
@@ -316,6 +316,9 @@ export default {
             ]
         },
         {
+            kind: "sep"
+        },
+        {
             kind: "category",
             name: "Variables",
             custom: "VARIABLE",
@@ -329,7 +332,8 @@ export default {
         {
             "kind": "category",
             "name": "Functions",
-            "custom": "PROCEDURE"
+            "custom": "PROCEDURE",
+            colour: "%{BKY_PROCEDURES_HUE}"
         },
         {
             kind: "sep"

@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import {useRoute} from "vue-router";
 import {useAsyncState} from "@vueuse/core";
-import {getProject} from "./data/projects.ts";
+import {getProjectById} from "./data/projects.ts";
 import Editor from "./Editor.vue";
 
 const route = useRoute();
 
-const {state: project, isLoading} = useAsyncState(() => getProject(route.params.id as string), null);
+const {state: project, isLoading} = useAsyncState(() => getProjectById(route.params.id as string), null);
 
 </script>
 
