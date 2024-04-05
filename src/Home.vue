@@ -7,7 +7,6 @@ import Button from "primevue/button";
 import Toolbar from "primevue/toolbar";
 import DataView from "primevue/dataview";
 import ProgressSpinner from 'primevue/progressspinner';
-import {useDialog} from "primevue/usedialog";
 import {useConfirm} from "primevue/useconfirm";
 import {useToast} from "primevue/usetoast";
 import NewProjectDialog from "./components/NewProjectDialog.vue";
@@ -17,25 +16,20 @@ import TablerUpload from '~icons/tabler/upload'
 import TablerPlus from '~icons/tabler/plus'
 import {open} from '@tauri-apps/plugin-shell'
 import {homeDir, join} from "@tauri-apps/api/path";
+import {ref} from "vue";
 
 dayjs.extend(RelativeTime);
 
 const {state: projects, isLoading, execute: reloadProjects} = useAsyncState(getProjects, []);
 
-const dialog = useDialog();
 const confirm = useConfirm();
 const toast = useToast();
 
-function openNewProjectDialog() {
-  dialog.open(NewProjectDialog, {
-    props: {
-      header: 'Create a new projectf',
-      modal: true
-    },
-    onClose(options) {
-      reloadProjects();
-    },
-  })
+const showNewProjectDialog = ref(false)
+
+function handleProjectCreated() {
+  reloadProjects();
+  toast.add({severity: 'info', summary: 'Created', detail: 'Project created', life: 3000});
 }
 
 async function showInFolderAction(projectId: string) {
@@ -62,10 +56,10 @@ function deleteProjectAction(projectId: string) {
     accept: async () => {
       await deleteProjectById(projectId);
       await reloadProjects();
-      toast.add({ severity: 'info', summary: 'Confirmed', detail: 'Project deleted', life: 3000 });
+      toast.add({severity: 'info', summary: 'Confirmed', detail: 'Project deleted', life: 3000});
     },
     reject: () => {
-      toast.add({ severity: 'error', summary: 'Rejected', detail: 'You chose not to delete the project', life: 3000 });
+      toast.add({severity: 'error', summary: 'Rejected', detail: 'You chose not to delete the project', life: 3000});
     }
   });
 }
@@ -83,7 +77,7 @@ function deleteProjectAction(projectId: string) {
             <TablerUpload/>
           </template>
         </Button>
-        <Button @click="openNewProjectDialog" title="Create a new project">
+        <Button @click="showNewProjectDialog = true" title="Create a new project">
           <template #icon>
             <TablerPlus/>
           </template>
@@ -126,4 +120,5 @@ function deleteProjectAction(projectId: string) {
   <div v-else>
     No projects
   </div>
+  <NewProjectDialog v-model="showNewProjectDialog" @created="handleProjectCreated"/>
 </template>
