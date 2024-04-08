@@ -95,7 +95,7 @@ app.mount('#app');
         "build": "vite build"
       },
       dependencies: {
-        "@ionic/vue": "^7.0.0",
+        "@ionic/vue": "next",
         "ionicons": "^7.0.0",
         "vue": "^3.4.21",
         "vue-router": "^4.3.0"
