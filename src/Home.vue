@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import Avatar from 'primevue/avatar';
 import Card from 'primevue/card';
 import {deleteProjectById, getProjectById, getProjects} from "./data/projects.ts";
 import {useAsyncState} from "@vueuse/core";
@@ -13,6 +14,8 @@ import dayjs from "dayjs";
 import RelativeTime from "dayjs/plugin/relativeTime"
 import TablerUpload from '~icons/tabler/upload'
 import TablerPlus from '~icons/tabler/plus'
+import TablerFolder from '~icons/tabler/folder'
+import TablerTrashX from '~icons/tabler/trash-x'
 import {open} from '@tauri-apps/plugin-shell'
 import {homeDir, join} from "@tauri-apps/api/path";
 import {ref} from "vue";
@@ -93,6 +96,7 @@ function deleteProjectAction(projectId: string) {
         <template v-for="project in items" :key="project.id">
           <Card style="width: 300px;">
             <template #title>
+              <Avatar :label="project.name[0]" size="large" />
               {{ project.name }}
             </template>
             <template #subtitle>
@@ -105,11 +109,15 @@ function deleteProjectAction(projectId: string) {
                 <RouterLink :to="`/project/${project.id}`">
                   <Button>Open</Button>
                 </RouterLink>
-                <Button severity="info" outlined @click="showInFolderAction(project.id)">
-                  Show in folder
+                <Button severity="info" outlined @click="showInFolderAction(project.id)" title="Show in folder">
+                  <template #icon>
+                    <TablerFolder />
+                  </template>
                 </Button>
-                <Button outlined severity="danger" @click="deleteProjectAction(project.id)">
-                  Delete
+                <Button outlined severity="danger" @click="deleteProjectAction(project.id)" title="Delete">
+                  <template #icon>
+                    <TablerTrashX />
+                  </template>
                 </Button>
               </div>
             </template>
