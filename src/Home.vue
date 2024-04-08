@@ -2,7 +2,6 @@
 import Card from 'primevue/card';
 import {deleteProjectById, getProjectById, getProjects} from "./data/projects.ts";
 import {useAsyncState} from "@vueuse/core";
-import ButtonGroup from "primevue/buttongroup";
 import Button from "primevue/button";
 import Toolbar from "primevue/toolbar";
 import DataView from "primevue/dataview";
@@ -71,7 +70,7 @@ function deleteProjectAction(projectId: string) {
       Your Projects
     </template>
     <template #end>
-      <ButtonGroup>
+      <div style="display: flex; gap: 0.5rem;">
         <Button title="Import project">
           <template #icon>
             <TablerUpload/>
@@ -82,7 +81,7 @@ function deleteProjectAction(projectId: string) {
             <TablerPlus/>
           </template>
         </Button>
-      </ButtonGroup>
+      </div>
     </template>
   </Toolbar>
   <template v-if="isLoading">
@@ -102,15 +101,17 @@ function deleteProjectAction(projectId: string) {
               Updated {{ dayjs.unix(project.updatedAt).fromNow() }}
             </template>
             <template #footer>
-              <RouterLink :to="`/project/${project.id}`">
-                <Button>Open</Button>
-              </RouterLink>
-              <Button severity="info" outlined @click="showInFolderAction(project.id)">
-                Show in folder
-              </Button>
-              <Button outlined severity="danger" @click="deleteProjectAction(project.id)">
-                Delete
-              </Button>
+              <div style="display: flex; gap: 0.5rem;">
+                <RouterLink :to="`/project/${project.id}`">
+                  <Button>Open</Button>
+                </RouterLink>
+                <Button severity="info" outlined @click="showInFolderAction(project.id)">
+                  Show in folder
+                </Button>
+                <Button outlined severity="danger" @click="deleteProjectAction(project.id)">
+                  Delete
+                </Button>
+              </div>
             </template>
           </Card>
         </template>

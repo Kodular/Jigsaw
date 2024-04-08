@@ -3,7 +3,7 @@ import {runCommand} from "../utils/shell.ts";
 import {WebviewWindow} from "@tauri-apps/api/webviewWindow";
 import {Project} from "../models/Project.ts";
 
-export async function runPreviewService(project: Project, abortController: AbortController) {
+export async function runPreviewService(project: Project, abortController: AbortController, onClose: () => void) {
     const projectFullPath = await getFullProjectPath(project.name);
     await runCommand("bun", ["install"], projectFullPath);
 
@@ -19,7 +19,8 @@ export async function runPreviewService(project: Project, abortController: Abort
 
     const unlisten = await previewWindow.onCloseRequested(() => {
         console.log("Aborting preview")
-        abortController.abort();
+        if (!abortController.signal.aborted) abortController.abort();
+        onClose()
     });
 
     previewWindow.once('tauri://created', () => {
@@ -31,7 +32,7 @@ export async function runPreviewService(project: Project, abortController: Abort
         abortController.abort();
     })
 
-    abortController.signal?.addEventListener('abort', () => {
+    abortController.signal.addEventListener('abort', () => {
         console.log('closing preview');
         unlisten();
         previewWindow.close();

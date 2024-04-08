@@ -10,27 +10,34 @@
       </template>
 
       <template #center>
-        {{ project?.name }}
+        {{ project.name }}
       </template>
 
       <template #end>
-        <ButtonGroup>
+        <div style="display: flex; gap: 0.5rem;">
           <Button title="Build project">
             <template #icon>
-              <TablerTools />
+              <TablerTools/>
             </template>
           </Button>
-          <Button @click="startPreview" title="Preview app">
+
+          <Button @click="stopPreview" title="Stop preview" severity="danger" v-if="isPreviewing">
             <template #icon>
-              <TablerEye />
+              <TablerEyeClosed/>
             </template>
           </Button>
+          <Button @click="startPreview" title="Preview app" v-else>
+            <template #icon>
+              <TablerEye/>
+            </template>
+          </Button>
+
           <Button @click="saveCode" title="Save project">
             <template #icon>
-              <TablerDeviceFloppy />
+              <TablerDeviceFloppy/>
             </template>
           </Button>
-        </ButtonGroup>
+        </div>
       </template>
     </Toolbar>
     <!--    <Splitter style="height: 100%;">-->
@@ -49,7 +56,6 @@
 <script lang="ts" setup>
 import Toolbar from 'primevue/toolbar';
 import Button from 'primevue/button';
-import ButtonGroup from 'primevue/buttongroup';
 import BlocklyComponent from "./components/BlocklyComponent.vue";
 import toolbox from "./blocks/toolbox.ts";
 import "./blocks/jigsaw.ts";
@@ -62,6 +68,7 @@ import {runPreviewService} from "./services/preview.ts";
 import TablerArrowLeft from '~icons/tabler/arrow-left'
 import TablerTools from '~icons/tabler/tools'
 import TablerEye from '~icons/tabler/eye'
+import TablerEyeClosed from '~icons/tabler/eye-closed'
 import TablerDeviceFloppy from '~icons/tabler/device-floppy'
 import {useDark} from "@vueuse/core";
 import {Project} from "./models/Project.ts";
@@ -104,7 +111,8 @@ const blockEvents = new Set([
 ]);
 
 const blocklyEl = ref<typeof BlocklyComponent | null>(null);
-const abortControllerForPreviewService = ref<AbortController | null>(null);
+const isPreviewing = ref(false)
+const previewAbortController = ref<AbortController | null>(null);
 
 async function saveCode() {
   if (project && blocklyEl.value?.workspace) {
@@ -113,12 +121,15 @@ async function saveCode() {
 }
 
 function startPreview() {
-  if (abortControllerForPreviewService.value && !abortControllerForPreviewService.value.signal.aborted) {
-    return;
-  }
   const ac = new AbortController();
-  runPreviewService(project, ac);
-  abortControllerForPreviewService.value = ac;
+  runPreviewService(project, ac, () => isPreviewing.value = false);
+  previewAbortController.value = ac;
+  isPreviewing.value = true;
+}
+
+function stopPreview() {
+  previewAbortController.value?.abort();
+  isPreviewing.value = false;
 }
 
 onMounted(() => {
@@ -143,7 +154,7 @@ onMounted(() => {
 });
 
 onUnmounted(async () => {
-  abortControllerForPreviewService.value?.abort();
+  stopPreview();
   await saveCode();
   blocklyEl.value?.workspace.dispose();
 })
