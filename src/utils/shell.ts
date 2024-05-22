@@ -17,18 +17,23 @@ export async function runCommand(program: string, args: string[], cwd: string, a
         command.stdout.on('data', line => console.info(`${program}: ${line.trim()}`));
         command.stderr.on('data', line => console.warn(`${program}: ${line.trim()}`));
 
-        const child = await command.spawn();
-        console.log('pid:', child.pid);
+        try {
+            const child = await command.spawn();
+            console.log('pid:', child.pid);
 
-        abortSignal?.addEventListener('abort', async () => {
-            console.log('aborting command', child.pid);
+            abortSignal?.addEventListener('abort', async () => {
+                console.log('aborting command', child.pid);
 
-            if (platformName === 'windows') {
-                await Command.create('cmd', ['/C', `taskkill /pid ${child.pid} /f /t`]).execute();
-                await child.kill();
-            } else {
-                await child.kill();
-            }
-        });
+                if (platformName === 'windows') {
+                    await Command.create('cmd', ['/C', `taskkill /pid ${child.pid} /f /t`]).execute();
+                    await child.kill();
+                } else {
+                    await child.kill();
+                }
+            });
+        }catch(e) {
+            console.log(program, args)
+            console.error(e)
+        }
     });
 }
