@@ -1,7 +1,7 @@
 <script setup>
 import {onMounted, ref, shallowRef} from "vue";
-import Blockly from "blockly";
-import {LexicalVariablesPlugin} from '@mit-app-inventor/blockly-block-lexical-variables';
+import * as Blockly from "blockly";
+// import {LexicalVariablesPlugin} from '@mit-app-inventor/blockly-block-lexical-variables';
 import {ElMessage, ElMessageBox} from 'element-plus'
 import 'element-plus/dist/index.css'
 
@@ -29,7 +29,7 @@ Blockly.dialog.setPrompt((title, defaultValue, callback) => {
 
 onMounted(() => {
   const ws = Blockly.inject(blocklyDiv.value, props.options);
-  LexicalVariablesPlugin.init(ws);
+  // LexicalVariablesPlugin.init(ws);
 
   workspace.value = ws;
 });

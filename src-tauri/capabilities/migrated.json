@@ -72,7 +72,7 @@
     "window:allow-start-dragging",
     "webview:allow-print",
     {
-      "identifier": "shell:allow-execute",
+      "identifier": "shell:allow-spawn",
       "allow": [
         {
           "args": true,
