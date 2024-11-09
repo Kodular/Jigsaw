@@ -1,12 +1,7 @@
-import {Store} from "@tauri-apps/plugin-store";
+import {LazyStore, Store} from "@tauri-apps/plugin-store";
 import {Project} from "../models/Project.ts";
 
-const projectsStore = new Store("projects");
-try {
-    await projectsStore.load();
-} catch (e) {
-    console.error("Failed to load store from disk", e);
-}
+const projectsStore = new LazyStore("projects.json");
 
 export async function getProjects() {
     const rawProjects = await projectsStore.values();

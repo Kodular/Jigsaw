@@ -1,6 +1,6 @@
 import {createApp} from "vue";
 import PrimeVue from 'primevue/config';
-import Aura from 'primevue/themes/aura';
+import Aura from '@primevue/themes/aura';
 import {createRouter, createWebHistory} from "vue-router";
 import Home from "./Home.vue";
 import App from "./App.vue";

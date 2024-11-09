@@ -10,16 +10,16 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [build-dependencies]
-tauri-build = { version = "2.0.0-beta", features = [] }
+tauri-build = { version = "2.0.2", features = [] }
 
 [dependencies]
-tauri = { version = "2.0.0-beta", features = [] }
+tauri = { version = "2.0.6", features = [] }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
-tauri-plugin-fs = "2.0.0-beta.5"
-tauri-plugin-shell = "2.0.0-beta.6"
-tauri-plugin-os = "2.0.0-beta.5"
-tauri-plugin-store = "2.0.0-beta.5"
+tauri-plugin-fs = "2"
+tauri-plugin-shell = "2"
+tauri-plugin-os = "2"
+tauri-plugin-store = "2"
 
 [features]
 # this feature is used for production builds or when `devPath` points to the filesystem
@@ -27,4 +27,4 @@ tauri-plugin-store = "2.0.0-beta.5"
 custom-protocol = ["tauri/custom-protocol"]
 
 [target."cfg(not(any(target_os = \"android\", target_os = \"ios\")))".dependencies]
-tauri-plugin-global-shortcut = "2.0.0-beta.2"
+tauri-plugin-global-shortcut = "2"
