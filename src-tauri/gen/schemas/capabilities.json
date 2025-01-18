@@ -1,1 +1,1 @@
-{"desktop-capability":{"identifier":"desktop-capability","description":"","local":true,"permissions":["global-shortcut:default"],"platforms":["macOS","windows","linux"]}}
+{"default":{"identifier":"default","description":"Capability for the main window","local":true,"windows":["main","preview-window"],"permissions":["core:default","shell:allow-open","store:default"]}}
